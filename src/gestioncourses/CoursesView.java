@@ -14,17 +14,19 @@ class CoursesView extends JFrame implements ICoursesView {
     JButton updateButton;
     JButton deleteButton;
     JList<String> articleList;
-    DefaultListModel<String> listModel;
+    public DefaultListModel<String> listModel = new DefaultListModel<>();
 
     private CoursesController controller;
 
+    
+    
     public CoursesView() {
         // Set up the frame
         setTitle("Gestion des Courses");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 450);
         setLocationRelativeTo(null); // Center the window on the screen
-
+  articleList = new JList<>(listModel);
         // Use a modern look and feel
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf()); // FlatLaf for modern UI

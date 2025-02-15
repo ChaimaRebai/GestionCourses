@@ -7,29 +7,42 @@ import org.mockito.Mockito;
 import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import static org.mockito.Mockito.*;
+import org.mockito.MockitoAnnotations;
 
 class CoursesControllerTest {
 
     private ListeCourses model;
     private CoursesView view;
+@Mock
+private ArticleRepository articleRepository;
+
+@InjectMocks
+private CoursesController coursesController;
     private CoursesController controller;
+@BeforeEach
+void setUp() {
+    model = Mockito.mock(ListeCourses.class);
+    view = Mockito.mock(CoursesView.class);
+MockitoAnnotations.initMocks(this);
 
-    @BeforeEach
-    void setUp() {
-        // Mock the dependencies
-        model = Mockito.mock(ListeCourses.class);
-        view = Mockito.mock(CoursesView.class);
-doNothing().when(view).showMessageDialog(anyString());
+    // Mock UI components
+    when(view.nomField).thenReturn(Mockito.mock(JTextField.class));
+    when(view.quantiteField).thenReturn(Mockito.mock(JTextField.class));
+    when(view.articleList).thenReturn(Mockito.mock(JList.class));
+    when(view.listModel).thenReturn(Mockito.mock(DefaultListModel.class)); // Mock listModel
 
-        // Mock the UI components
-        when(view.nomField.getText()).thenReturn("Test Article");
-        when(view.quantiteField.getText()).thenReturn("5");
-        when(view.articleList.getSelectedIndex()).thenReturn(0);
+    // Set default behaviors
+    when(view.nomField.getText()).thenReturn("Test Article");
+    when(view.quantiteField.getText()).thenReturn("5");
+    when(view.articleList.getSelectedIndex()).thenReturn(0);
 
-        // Initialize the controller
-        controller = new CoursesController(model, view);
-    }
+    // Initialize controller
+    controller = new CoursesController(model, view);
+}
+
 
     @Test
     void testAjouterArticle_ValidInput() {
