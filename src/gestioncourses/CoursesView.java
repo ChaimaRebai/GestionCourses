@@ -1,45 +1,75 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package gestioncourses;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- *
- * @author HANA
+ * A view class for managing a list of articles.
  */
 class CoursesView extends JFrame implements ICoursesView {
-    JTextField nomField, quantiteField;
-    JButton addButton, updateButton, deleteButton;
+    JTextField nomField;
+    JTextField quantiteField;
+    JButton addButton;
+    JButton updateButton;
+    JButton deleteButton;
     JList<String> articleList;
     DefaultListModel<String> listModel;
 
     private CoursesController controller;
 
     public CoursesView() {
-        // Initialisation des composants
+        // Set up the frame
+        setTitle("Gestion des Courses");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(500, 400);
+        setLocationRelativeTo(null); // Center the window on the screen
+
+        // Create components
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel listPanel = new JPanel(new BorderLayout());
+
+        // Input fields with labels
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Add padding
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        inputPanel.add(new JLabel("Nom de l'article:"), gbc);
+
+        gbc.gridx = 1;
         nomField = new JTextField(15);
+        inputPanel.add(nomField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        inputPanel.add(new JLabel("Quantité:"), gbc);
+
+        gbc.gridx = 1;
         quantiteField = new JTextField(5);
+        inputPanel.add(quantiteField, gbc);
+
+        // Buttons
         addButton = new JButton("Ajouter");
         updateButton = new JButton("Modifier");
         deleteButton = new JButton("Supprimer");
+        buttonPanel.add(addButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+
+        // Article list
         listModel = new DefaultListModel<>();
         articleList = new JList<>(listModel);
-        
-        // Mise en page
-        setLayout(new FlowLayout());
-        add(nomField);
-        add(quantiteField);
-        add(addButton);
-        add(updateButton);
-        add(deleteButton);
-        add(new JScrollPane(articleList));
+        JScrollPane scrollPane = new JScrollPane(articleList);
+        listPanel.add(scrollPane, BorderLayout.CENTER);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        // Add panels to the frame
+        setLayout(new BorderLayout());
+        add(inputPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.CENTER);
+        add(listPanel, BorderLayout.SOUTH);
+
+        // Make the frame visible
         setVisible(true);
     }
 
@@ -58,7 +88,11 @@ class CoursesView extends JFrame implements ICoursesView {
 
     @Override
     public int getQuantite() {
-        return Integer.parseInt(quantiteField.getText());
+        try {
+            return Integer.parseInt(quantiteField.getText());
+        } catch (NumberFormatException e) {
+            return -1; // Indicate invalid input
+        }
     }
 
     @Override
@@ -78,5 +112,9 @@ class CoursesView extends JFrame implements ICoursesView {
     @Override
     public void removeArticle(int index) {
         listModel.remove(index);
+    }
+
+    public void showMessageDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 }
