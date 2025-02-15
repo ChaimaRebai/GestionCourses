@@ -67,7 +67,7 @@ class CoursesView extends JFrame implements ICoursesView {
         // Buttons panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         addButton = createButton("Ajouter", "add.png");
-        updateButton = createButton("Modifier", "edit.png");
+        updateButton = createButton("Modifier", "pen.png");
         deleteButton = createButton("Supprimer", "delete.png");
         buttonPanel.add(addButton);
         buttonPanel.add(updateButton);
@@ -97,24 +97,26 @@ class CoursesView extends JFrame implements ICoursesView {
     /**
      * Creates a styled button with an icon.
      */
-    private JButton createButton(String text, String iconPath) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        button.setFocusPainted(false);
-        button.setBackground(new Color(0, 123, 255)); // Blue background
-        button.setForeground(Color.WHITE); // White text
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding
+private JButton createButton(String text, String iconPath) {
+    JButton button = new JButton(text);
+    button.setFont(new Font("Segoe UI", Font.BOLD, 24));
+    button.setFocusPainted(false);
+    button.setBackground(new Color(80, 200, 255)); // Blue background
+    button.setForeground(Color.WHITE); // White text
+    button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding
 
-        // Load icon (if available)
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
-            button.setIcon(icon);
-        } catch (Exception e) {
-            // Icon not found, use text only
-        }
-
-        return button;
+    // Load and resize icon (if available)
+    try {
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource(iconPath));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Resize to 20x20
+        button.setIcon(new ImageIcon(scaledImage));
+    } catch (Exception e) {
+        // Icon not found, use text only
     }
+
+    return button;
+}
+
 
     @Override
     public void setController(CoursesController controller) {
